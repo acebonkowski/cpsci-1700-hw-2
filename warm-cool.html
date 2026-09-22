@@ -26,7 +26,7 @@
     .legend{display:flex;gap:15px;margin-top:14px;font-size:.78rem}.legend i{display:inline-block;width:9px;height:9px;border:1px solid var(--ink);border-radius:50%;margin-right:5px}.legend .c{background:var(--blue)}.legend .w{background:var(--orange)}
     .preset-card h2{font-size:1.6rem}.preset-list{display:grid;gap:8px}.preset-btn{border:1px solid var(--ink);background:#fff;text-align:left;padding:10px 11px;display:grid;grid-template-columns:auto 1fr;column-gap:9px;box-shadow:2px 2px 0 var(--ink)}.preset-btn:hover{background:var(--acid)}.preset-btn[aria-pressed="true"]{background:var(--acid);outline:3px solid var(--orange);outline-offset:1px}.preset-num{grid-row:1/3;font:900 .72rem ui-monospace,monospace;background:var(--ink);color:#fff;padding:4px;align-self:start}.preset-btn b{font-size:.88rem}.preset-btn small{font-size:.75rem;color:#555;margin-top:2px}
     .insight{background:var(--ink);color:#fff}.insight .eyebrow span{color:var(--ink)}.insight p{color:#d6d6d2;margin-bottom:0}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-    .train-view{display:none}.train-view.active{display:block}.rgb-view.is-hidden,.label-view.is-hidden{display:none}.plot-wrap{position:relative;margin:25px 0 18px;padding-top:34px}.axis{height:88px;border:2px solid var(--ink);position:relative;background:linear-gradient(90deg,#2540b8,#d8d3c6 50%,#e0472c)}.boundary{position:absolute;top:-12px;bottom:-12px;width:4px;background:var(--ink);left:50%;transition:left .12s linear}.boundary:before{content:attr(data-label);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font:800 .72rem ui-monospace,monospace;background:var(--ink);color:#fff;padding:4px 6px;border:1px solid var(--ink);white-space:nowrap}
+    .train-view{display:none}.train-view.active{display:block}.is-hidden{display:none}.plot-wrap{position:relative;margin:25px 0 18px;padding-top:34px}.axis{height:88px;border:2px solid var(--ink);position:relative;background:linear-gradient(90deg,#2540b8,#d8d3c6 50%,#e0472c)}.boundary{position:absolute;top:-12px;bottom:-12px;width:4px;background:var(--ink);left:50%;transition:left .12s linear}.boundary:before{content:attr(data-label);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font:800 .72rem ui-monospace,monospace;background:var(--ink);color:#fff;padding:4px 6px;border:1px solid var(--ink);white-space:nowrap}
     .point{position:absolute;width:18px;height:18px;border:2px solid var(--ink);border-radius:50%;transform:translate(-50%,-50%);transition:left .3s,top .3s}.point.cool-p{top:72%}.point.warm-p{top:28%}.ticks{display:flex;justify-content:space-between;font:700 .72rem ui-monospace,monospace;margin-top:6px}.meters{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.meter{border:2px solid var(--ink);padding:12px}.meter label{display:block;text-transform:uppercase;font:800 .7rem ui-monospace,monospace;margin-bottom:5px}.meter strong{font-size:1.7rem;letter-spacing:-.04em}
     .cutoff-banner{margin:18px 0;border:3px solid var(--ink);background:var(--acid);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;box-shadow:5px 5px 0 var(--ink)}.cutoff-banner[hidden]{display:none}.cutoff-banner span{font:800 .78rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.06em}.cutoff-banner strong{font:900 2.4rem ui-monospace,monospace;letter-spacing:-.03em}
     .explain{border-left:7px solid var(--acid);padding-left:14px;margin:18px 0}.explain strong{display:block;margin-bottom:4px}.rule-diagram{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;margin-top:12px;border:1px solid var(--ink);background:#ece9df}.rule-part{padding:12px}.rule-part b{display:block;font-size:.86rem;margin-bottom:3px}.rule-part span{font-size:.8rem;color:#555}.rule-divider{display:grid;place-items:center;background:var(--orange);border-left:1px solid var(--ink);border-right:1px solid var(--ink);padding:8px;font:800 .7rem ui-monospace,monospace;text-transform:uppercase;writing-mode:vertical-rl}.footer-actions{display:flex;gap:10px}.footer-actions .btn{flex:1}
@@ -47,11 +47,22 @@
 <body>
   <main class="shell">
     <header><div class="brand">WARM / COOL · ML</div><div class="chapter">Interactive lesson · about 3 minutes</div></header>
-    <div class="lesson">
-      <section class="card" aria-live="polite">
-        <div class="step-row" aria-label="Lesson progress"><div class="step on"></div><div class="step"></div><div class="step"></div><div class="step"></div></div>
+    <div class="step-row" aria-label="Lesson progress"><div class="step on"></div><div class="step"></div><div class="step"></div><div class="step"></div></div>
 
-        <div class="rgb-view">
+    <div id="introScreen">
+      <div class="lesson">
+        <section class="card">
+          <p class="eyebrow"><span>Overview</span></p>
+          <h1>Warm or cool?</h1>
+          <p class="lede">This page builds a tiny machine-learning classifier from scratch, right in front of you. You'll label a handful of colors, watch a computer search for the simplest rule that fits your labels, then test that rule on a color you mix yourself.</p>
+          <div class="rule-diagram" aria-label="What this classifier does">
+            <div class="rule-part"><b>You provide</b><span>10 colors, each labeled warm or cool</span></div>
+            <div class="rule-divider">trains</div>
+            <div class="rule-part"><b>It learns</b><span>One cutoff number that best matches your labels</span></div>
+          </div>
+          <p class="lede" style="margin-top:16px">Why start with Red, Green, and Blue? Because that's genuinely all a computer ever has to work with — a color is just three numbers to it. Before we can talk about "warm" or "cool," it helps to see those three numbers for yourself.</p>
+        </section>
+        <section class="card">
           <p class="eyebrow"><span>Step 0</span> Warm-up</p>
           <h2>What is RGB?</h2>
           <p class="lede">Every color on a screen is stored as three numbers from 0 to 255: how much Red light, how much Green light, and how much Blue light are mixed together. Slide each one and watch the picture and the numbers move together.</p>
@@ -82,11 +93,16 @@
             </div>
           </details>
           <button class="btn primary" id="warmupNextBtn">Start labeling colors →</button>
-        </div>
+        </section>
+      </div>
+    </div>
 
-        <div class="label-view is-hidden">
+    <div id="mainScreen" class="is-hidden">
+      <div class="lesson">
+      <section class="card" aria-live="polite">
+        <div class="label-view">
           <p class="eyebrow"><span>Step 1</span> Make the training data</p>
-          <h1>Warm or cool?</h1>
+          <h2>Label the colors.</h2>
           <p class="lede">A computer never sees a color the way you do. It only sees three numbers — how much Red, Green, and Blue mix together. You decide the label; the computer will look for the pattern.</p>
           <div class="pixel-stage">
             <div class="pixel" id="pixel" aria-hidden="true"></div>
@@ -229,6 +245,7 @@
           <p id="sideCopy">Red and Blue are just inputs. Your "warm" and "cool" answers are the labels the model tries to imitate. It never perceives color the way you do — only a subtraction and a comparison.</p>
         </section>
       </aside>
+      </div>
     </div>
     <footer class="tb-credit">
       <span>Layout &amp; interaction pattern adapted from the <a href="one-pixel.html">One Pixel ML Lab</a> by Xiuye Chen (CC BY 4.0) · Warm/Cool build for CPSC 1710 HW2</span>
@@ -278,7 +295,8 @@
     }
     function showTraining(){
       if(labels.some(x=>x===null))return;
-      $('.rgb-view').classList.add('is-hidden');$('.label-view').classList.add('is-hidden');$('.train-view').classList.add('active');
+      $('#introScreen').classList.add('is-hidden');$('#mainScreen').classList.remove('is-hidden');
+      $('.label-view').classList.add('is-hidden');$('.train-view').classList.add('active');
       document.querySelectorAll('.step')[1].className='step done';document.querySelectorAll('.step')[2].className='step on';
       renderSamples();drawPoints();
     }
@@ -330,7 +348,7 @@
     }
     ['#warmupRedSlider','#warmupGreenSlider','#warmupBlueSlider'].forEach(sel=>$(sel).addEventListener('input',renderWarmup));
     $('#warmupNextBtn').addEventListener('click',()=>{
-      $('.rgb-view').classList.add('is-hidden');$('.label-view').classList.remove('is-hidden');
+      $('#introScreen').classList.add('is-hidden');$('#mainScreen').classList.remove('is-hidden');
       document.querySelectorAll('.step')[0].className='step done';document.querySelectorAll('.step')[1].className='step on';
     });
     renderWarmup();
