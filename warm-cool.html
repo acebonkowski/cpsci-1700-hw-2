@@ -26,11 +26,12 @@
     .legend{display:flex;gap:15px;margin-top:14px;font-size:.78rem}.legend i{display:inline-block;width:9px;height:9px;border:1px solid var(--ink);border-radius:50%;margin-right:5px}.legend .c{background:var(--blue)}.legend .w{background:var(--orange)}
     .preset-card h2{font-size:1.6rem}.preset-list{display:grid;gap:8px}.preset-btn{border:1px solid var(--ink);background:#fff;text-align:left;padding:10px 11px;display:grid;grid-template-columns:auto 1fr;column-gap:9px;box-shadow:2px 2px 0 var(--ink)}.preset-btn:hover{background:var(--acid)}.preset-btn[aria-pressed="true"]{background:var(--acid);outline:3px solid var(--orange);outline-offset:1px}.preset-num{grid-row:1/3;font:900 .72rem ui-monospace,monospace;background:var(--ink);color:#fff;padding:4px;align-self:start}.preset-btn b{font-size:.88rem}.preset-btn small{font-size:.75rem;color:#555;margin-top:2px}
     .insight{background:var(--ink);color:#fff}.insight .eyebrow span{color:var(--ink)}.insight p{color:#d6d6d2;margin-bottom:0}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-    .train-view{display:none}.train-view.active{display:block}.label-view.hidden{display:none}.plot-wrap{position:relative;margin:25px 0 18px;padding-top:34px}.axis{height:88px;border:2px solid var(--ink);position:relative;background:linear-gradient(90deg,#2540b8,#d8d3c6 50%,#e0472c)}.boundary{position:absolute;top:-12px;bottom:-12px;width:4px;background:var(--ink);left:50%;transition:left .12s linear}.boundary:before{content:"cutoff";position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font:800 .72rem ui-monospace,monospace;background:var(--ink);color:#fff;padding:4px 6px;border:1px solid var(--ink)}
+    .train-view{display:none}.train-view.active{display:block}.rgb-view.is-hidden,.label-view.is-hidden{display:none}.plot-wrap{position:relative;margin:25px 0 18px;padding-top:34px}.axis{height:88px;border:2px solid var(--ink);position:relative;background:linear-gradient(90deg,#2540b8,#d8d3c6 50%,#e0472c)}.boundary{position:absolute;top:-12px;bottom:-12px;width:4px;background:var(--ink);left:50%;transition:left .12s linear}.boundary:before{content:attr(data-label);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font:800 .72rem ui-monospace,monospace;background:var(--ink);color:#fff;padding:4px 6px;border:1px solid var(--ink);white-space:nowrap}
     .point{position:absolute;width:18px;height:18px;border:2px solid var(--ink);border-radius:50%;transform:translate(-50%,-50%);transition:left .3s,top .3s}.point.cool-p{top:72%}.point.warm-p{top:28%}.ticks{display:flex;justify-content:space-between;font:700 .72rem ui-monospace,monospace;margin-top:6px}.meters{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.meter{border:2px solid var(--ink);padding:12px}.meter label{display:block;text-transform:uppercase;font:800 .7rem ui-monospace,monospace;margin-bottom:5px}.meter strong{font-size:1.7rem;letter-spacing:-.04em}
+    .cutoff-banner{margin:18px 0;border:3px solid var(--ink);background:var(--acid);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;box-shadow:5px 5px 0 var(--ink)}.cutoff-banner[hidden]{display:none}.cutoff-banner span{font:800 .78rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.06em}.cutoff-banner strong{font:900 2.4rem ui-monospace,monospace;letter-spacing:-.03em}
     .explain{border-left:7px solid var(--acid);padding-left:14px;margin:18px 0}.explain strong{display:block;margin-bottom:4px}.rule-diagram{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;margin-top:12px;border:1px solid var(--ink);background:#ece9df}.rule-part{padding:12px}.rule-part b{display:block;font-size:.86rem;margin-bottom:3px}.rule-part span{font-size:.8rem;color:#555}.rule-divider{display:grid;place-items:center;background:var(--orange);border-left:1px solid var(--ink);border-right:1px solid var(--ink);padding:8px;font:800 .7rem ui-monospace,monospace;text-transform:uppercase;writing-mode:vertical-rl}.footer-actions{display:flex;gap:10px}.footer-actions .btn{flex:1}
-    .mechanics{margin:16px 0;border:2px solid var(--ink);background:#f8f6ef}.mechanics summary{list-style:none;padding:14px 46px 14px 15px;font-weight:850;cursor:pointer;position:relative}.mechanics summary::-webkit-details-marker{display:none}.mechanics summary:after{content:"+";position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:1.45rem;line-height:1}.mechanics[open]>summary{border-bottom:2px solid var(--ink)}.mechanics-body{padding:15px}.mechanics-body>p{margin-bottom:14px}.mechanics-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:8px}.mechanic-step{border:1px solid var(--ink);padding:10px;background:#fff}.mechanic-step b{display:block;font:800 .7rem ui-monospace,monospace;text-transform:uppercase;margin-bottom:5px}.mechanic-step span{font-size:.85rem;line-height:1.35;display:block}.flow-arrow{display:grid;place-items:center;font-weight:900}.mechanics-live{margin:12px 0 0;background:var(--ink);color:#fff;padding:10px 12px;font:700 .8rem ui-monospace,monospace}.challenge{margin-top:14px;padding:13px;border:1px solid var(--ink);background:var(--acid)}.challenge>strong{display:block;margin-bottom:4px}.challenge>p{font-size:.88rem;margin-bottom:10px}.reveal{background:#fff;border:1px solid var(--ink)}.reveal summary{padding:10px 40px 10px 11px;font-size:.85rem}.reveal p{padding:0 11px 11px;margin:0;font-size:.86rem;line-height:1.45}.reveal[open] summary{border-bottom:0}.scope-note{margin-top:14px;border:1px solid var(--ink);background:#fff;padding:13px}.scope-note>strong{display:block;margin-bottom:9px}.scope-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.scope-part{border-left:5px solid var(--blue);padding-left:9px}.scope-part:last-child{border-color:var(--orange)}.scope-part b{display:block;font-size:.82rem;margin-bottom:3px}.scope-part span{font-size:.8rem;line-height:1.4;display:block;color:#494a47}.quote{margin:0 0 14px;padding-left:12px;border-left:4px solid var(--ink);font-style:italic;font-size:.86rem;color:#333}.quote cite{display:block;font-style:normal;font-size:.74rem;color:var(--muted);margin-top:4px}.codeblock{background:#f8f6ef;border:1px solid var(--ink);padding:11px;font-size:.82rem;overflow:auto;margin:0 0 14px;line-height:1.5}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-    .test-lab{display:none;margin:18px 0;border:2px solid var(--ink);background:var(--acid);padding:16px}.test-lab.active{display:block}.test-lab .eyebrow{margin-bottom:8px}.test-lab h3{font-size:1.45rem;letter-spacing:-.035em;margin:0 0 6px}.test-lab>p{font-size:.9rem;margin-bottom:14px}.test-grid{display:grid;grid-template-columns:90px 1fr;gap:16px;align-items:start}.test-pixel{aspect-ratio:1;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}.test-controls label{display:block;font-weight:800;margin-bottom:8px}.test-controls input{width:100%;accent-color:var(--orange);margin-bottom:4px}#redSlider{accent-color:var(--rchan)}#greenSlider{accent-color:var(--gchan)}#blueSlider{accent-color:var(--bchan)}.test-controls small{display:block;color:var(--muted);font-size:.78rem;margin-bottom:14px}.test-scale{display:flex;justify-content:space-between;font:700 .7rem ui-monospace,monospace;color:#555}
+    .mechanics{margin:16px 0;border:2px solid var(--ink);background:#f8f6ef}.mechanics summary{list-style:none;padding:14px 46px 14px 15px;font-weight:850;cursor:pointer;position:relative}.mechanics summary::-webkit-details-marker{display:none}.mechanics summary:after{content:"+";position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:1.45rem;line-height:1}.mechanics[open]>summary{border-bottom:2px solid var(--ink)}.mechanics-body{padding:15px}.mechanics-body>p{margin-bottom:14px}.mechanics-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:8px}.mechanic-step{border:1px solid var(--ink);padding:10px;background:#fff}.mechanic-step b{display:block;font:800 .7rem ui-monospace,monospace;text-transform:uppercase;margin-bottom:5px}.mechanic-step span{font-size:.85rem;line-height:1.35;display:block}.flow-arrow{display:grid;place-items:center;font-weight:900}.mechanics-live{margin:12px 0 0;background:var(--ink);color:#fff;padding:10px 12px;font:700 .8rem ui-monospace,monospace}.challenge{margin-top:14px;padding:13px;border:1px solid var(--ink);background:var(--acid)}.challenge>strong{display:block;margin-bottom:4px}.challenge>p{font-size:.88rem;margin-bottom:10px}.reveal{background:#fff;border:1px solid var(--ink)}.reveal summary{padding:10px 40px 10px 11px;font-size:.85rem}.reveal p{padding:0 11px 11px;margin:0;font-size:.86rem;line-height:1.45}.reveal[open] summary{border-bottom:0}.scope-note{margin-top:14px;border:1px solid var(--ink);background:#fff;padding:13px}.scope-note>strong{display:block;margin-bottom:9px}.scope-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.scope-part{border-left:5px solid var(--blue);padding-left:9px}.scope-part:last-child{border-color:var(--orange)}.scope-part b{display:block;font-size:.82rem;margin-bottom:3px}.scope-part span{font-size:.8rem;line-height:1.4;display:block;color:#494a47}.codeblock{background:#f8f6ef;border:1px solid var(--ink);padding:11px;font-size:.82rem;overflow:auto;margin:0 0 14px;line-height:1.5}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .test-lab{display:none;margin:18px 0;border:2px solid var(--ink);background:var(--acid);padding:16px}.test-lab.active{display:block}.test-lab .eyebrow{margin-bottom:8px}.test-lab h3{font-size:1.45rem;letter-spacing:-.035em;margin:0 0 6px}.test-lab>p{font-size:.9rem;margin-bottom:14px}.test-grid{display:grid;grid-template-columns:90px 1fr;gap:16px;align-items:start}.test-pixel{aspect-ratio:1;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}.test-controls label{display:block;font-weight:800;margin-bottom:8px}.test-controls input{width:100%;accent-color:var(--orange);margin-bottom:4px}#redSlider,#warmupRedSlider{accent-color:var(--rchan)}#greenSlider,#warmupGreenSlider{accent-color:var(--gchan)}#blueSlider,#warmupBlueSlider{accent-color:var(--bchan)}.test-controls small{display:block;color:var(--muted);font-size:.78rem;margin-bottom:14px}.test-scale{display:flex;justify-content:space-between;font:700 .7rem ui-monospace,monospace;color:#555}
     .evidence-heading{font:800 .78rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.06em;margin:13px 0 6px}
     .test-result{margin-top:2px;background:#fff;border:2px solid var(--ink);padding:12px;font-size:.95rem;line-height:1.4}.test-result strong{font-size:1.08rem}
     .evidence-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}.evidence-row:last-of-type{border-bottom:0}
@@ -48,9 +49,42 @@
     <header><div class="brand">WARM / COOL · ML</div><div class="chapter">Interactive lesson · about 3 minutes</div></header>
     <div class="lesson">
       <section class="card" aria-live="polite">
-        <div class="step-row" aria-label="Lesson progress"><div class="step on"></div><div class="step"></div><div class="step"></div></div>
+        <div class="step-row" aria-label="Lesson progress"><div class="step on"></div><div class="step"></div><div class="step"></div><div class="step"></div></div>
 
-        <div class="label-view">
+        <div class="rgb-view">
+          <p class="eyebrow"><span>Step 0</span> Warm-up</p>
+          <h2>What is RGB?</h2>
+          <p class="lede">Every color on a screen is stored as three numbers from 0 to 255: how much Red light, how much Green light, and how much Blue light are mixed together. Slide each one and watch the picture and the numbers move together.</p>
+          <div class="pixel-stage">
+            <div class="pixel" id="warmupPixel" aria-hidden="true"></div>
+            <div class="swatch-info">
+              <small>Color values</small>
+              <div class="rgb-row">
+                <span class="chip r">R <b id="warmupValR">120</b></span>
+                <span class="chip g">G <b id="warmupValG">90</b></span>
+                <span class="chip b">B <b id="warmupValB">200</b></span>
+              </div>
+            </div>
+          </div>
+          <div class="test-controls">
+            <label for="warmupRedSlider">Red <span id="warmupRedVal">120</span></label>
+            <input id="warmupRedSlider" type="range" min="0" max="255" value="120">
+            <label for="warmupGreenSlider">Green <span id="warmupGreenVal">90</span></label>
+            <input id="warmupGreenSlider" type="range" min="0" max="255" value="90">
+            <label for="warmupBlueSlider">Blue <span id="warmupBlueVal">200</span></label>
+            <input id="warmupBlueSlider" type="range" min="0" max="255" value="200">
+          </div>
+          <p class="helper">A computer never sees "purple" or "sky blue" — only three brightness numbers like these. Everything later in this lesson is built on that idea.</p>
+          <details class="mechanics">
+            <summary>Why 0–255?</summary>
+            <div class="mechanics-body">
+              <p>Black-and-white photos need only <strong>one</strong> number per pixel — 0 for black, 255 for white, and shades of gray in between. Color needs <strong>three</strong> — one channel each for Red, Green, and Blue — but it's the same trick: 0 to 255, the 256 values a computer can fit in a single byte. Mixing three of those numbers is exactly how every swatch in this lesson gets its color.</p>
+            </div>
+          </details>
+          <button class="btn primary" id="warmupNextBtn">Start labeling colors →</button>
+        </div>
+
+        <div class="label-view is-hidden">
           <p class="eyebrow"><span>Step 1</span> Make the training data</p>
           <h1>Warm or cool?</h1>
           <p class="lede">A computer never sees a color the way you do. It only sees three numbers — how much Red, Green, and Blue mix together. You decide the label; the computer will look for the pattern.</p>
@@ -59,9 +93,9 @@
             <div class="swatch-info">
               <small>Color values</small>
               <div class="rgb-row">
-                <span class="chip r">R <b id="valR">15</b></span>
-                <span class="chip g">G <b id="valG">90</b></span>
-                <span class="chip b">B <b id="valB">235</b></span>
+                <span class="chip r">R <b id="valR">225</b></span>
+                <span class="chip g">G <b id="valG">120</b></span>
+                <span class="chip b">B <b id="valB">165</b></span>
               </div>
               <p class="helper">Would you call this color warm or cool?</p>
             </div>
@@ -84,8 +118,7 @@
           <details class="mechanics">
             <summary>What is a "label," really?</summary>
             <div class="mechanics-body">
-              <blockquote class="quote">“There's a folder of 3s, and a folder of 7s. In machine learning parlance, we say that ‘3’ and ‘7’ are the labels (or targets) in this dataset.”<cite>Deep Learning for Coders, ch. 4 — on the MNIST digit dataset</cite></blockquote>
-              <p>Every example in a dataset has two parts: the <strong>input</strong> (what the computer can measure on its own) and the <strong>label</strong> (the answer a person attaches by hand). The book's digit classifier used folders of images labeled "3" or "7." Yours works the same way, just with color:</p>
+              <p>Every example in a dataset has two parts: the <strong>input</strong> (what the computer can measure on its own) and the <strong>label</strong> (the answer a person attaches by hand):</p>
               <div class="rule-diagram" aria-label="Input versus label">
                 <div class="rule-part"><b>Red, Green, Blue</b><span>Measured automatically the instant a color exists</span></div>
                 <div class="rule-divider">you add</div>
@@ -105,10 +138,11 @@
           <h2 id="trainTitle">Find the cutoff.</h2>
           <p class="lede" id="trainCopy">Training turns your labels into one rule: a cutoff on the Red − Blue scale. It tries possible cutoffs, counts the mistakes, and remembers the best.</p>
           <div class="plot-wrap" aria-label="Red-minus-blue scale with labeled samples and learned cutoff">
-            <div class="axis" id="axis"><div class="boundary" id="boundary"></div></div>
+            <div class="axis" id="axis"><div class="boundary" id="boundary" data-label="cutoff"></div></div>
             <div class="ticks"><span>−255 · all blue</span><span>Red − Blue</span><span>255 · all red</span></div>
           </div>
           <div class="meters"><div class="meter"><label>Training round</label><strong id="epoch">0 / 60</strong></div><div class="meter"><label>Mistakes</label><strong id="mistakes">—</strong></div></div>
+          <div class="cutoff-banner" id="cutoffBanner" hidden><span>Learned cutoff</span><strong id="cutoffValue">—</strong></div>
           <div class="explain" id="explain"><strong>What is learning?</strong><span>The model compares candidate cutoffs and keeps the one that best matches your labels.</span></div>
           <div class="rule-diagram" aria-label="How the model uses its cutoff">
             <div class="rule-part"><b>Score below the cutoff</b><span>The model calls it cool</span></div>
@@ -127,20 +161,7 @@
                 <div class="mechanic-step"><b>3 · Score</b><span>Count disagreements with your labels; keep the lowest score.</span></div>
               </div>
               <div class="mechanics-live" id="mechanicsLive" aria-live="polite">Ready to test 511 possible cutoffs.</div>
-              <blockquote class="quote" style="margin-top:14px">“The metric is to drive human understanding and the loss is to drive automated learning… accuracy is a function that is constant almost everywhere, so its derivative is nil almost everywhere… useless for updating the model.”<cite>Deep Learning for Coders, ch. 4 — on why accuracy can't train a real neural net</cite></blockquote>
-              <p>Real deep-learning models can't just try every possibility — the digit classifier in the same chapter has 784 weights, one per pixel, so checking every combination would take forever. Those models use calculus (<em>gradient descent</em>: init → predict → loss → gradient → step → repeat) to feel out which direction to nudge each weight. Our model only has <strong>one</strong> number to search, so it skips the calculus entirely and just brute-forces the answer.</p>
-              <div class="challenge">
-                <strong>Try an experiment</strong>
-                <p>Label the reddest colors "cool" and the bluest colors "warm" — backwards from what you'd expect. Why can't the model get a low mistake score?</p>
-                <details class="reveal"><summary>Reveal the answer</summary><p>The model has a built-in rule it can never break: cool belongs below the cutoff, warm belongs above it. Sliding the cutoff left or right cannot swap which side means what. A more flexible model could learn that too — this one can't, because that rule is baked into how it makes predictions, not something it searches for.</p></details>
-              </div>
-              <div class="scope-note">
-                <strong>Is this how machine learning usually learns?</strong>
-                <div class="scope-grid">
-                  <div class="scope-part"><b>Yes — the basic loop</b><span>Choose a model, make predictions, measure the mistakes, then improve or select its settings.</span></div>
-                  <div class="scope-part"><b>No — the search method</b><span>This demo can exhaustively check 511 cutoffs. Real models have far too many parameters for that and use gradient descent instead.</span></div>
-                </div>
-              </div>
+              <p style="margin-top:14px">Real deep-learning models can't just try every possibility — a digit-recognizing model can easily have 784 weights, one per pixel, so checking every combination would take forever. Those models use calculus (<em>gradient descent</em>) to feel out which direction to nudge each weight. Our model only has <strong>one</strong> number to search, so it skips the calculus and just brute-forces the answer — that's only possible because the search space here is tiny.</p>
             </div>
           </details>
           <section class="test-lab" id="testLab" aria-labelledby="testTitle">
@@ -170,8 +191,7 @@
   const score = red - blue
   return score &gt;= cutoff ? "warm" : "cool"
 }</pre>
-                <blockquote class="quote">“Parameters: The weights and biases of a model. The weights are the <code>w</code> in the equation <code>w*x+b</code>, and the biases are the <code>b</code> in that equation.”<cite>Deep Learning for Coders, ch. 4 — Jargon box</cite></blockquote>
-                <p>The book's simplest digit-classifier does the same kind of comparison in spirit: <code>is_3(x) = mnist_distance(x, mean3) &lt; mnist_distance(x, mean7)</code> — pick whichever number is smaller. Ours compares one score to one stored threshold. In the book's jargon, the <strong>cutoff</strong> is a <em>parameter</em> (learned once, then frozen); the score you compute right now for your slider color is an <em>activation</em> (a fresh number calculated every time you move a slider).</p>
+                <p>A classifier can compare things in lots of ways — for example by comparing two distances: <code>is_3(x) = distance(x, typical_3) &lt; distance(x, typical_7)</code>, picking whichever is smaller. Ours compares one score to one stored threshold instead. In machine-learning terms, the <strong>cutoff</strong> is a <em>parameter</em> — a number the model learns once and then keeps forever. The score you compute right now for your slider color is different: it's an <em>activation</em>, a fresh number recalculated every time you move a slider.</p>
                 <div class="challenge">
                   <strong>Try an experiment</strong>
                   <p>Drag the Green slider all the way up, then all the way down, without touching Red or Blue. Does the prediction change?</p>
@@ -216,16 +236,16 @@
   </main>
   <script>
     const swatches=[
-      {r:15, g:90,  b:235},
-      {r:55, g:110, b:235},
-      {r:95, g:130, b:235},
-      {r:145,g:160, b:235},
-      {r:195,g:200, b:235},
-      {r:235,g:205, b:215},
-      {r:235,g:150, b:175},
-      {r:235,g:120, b:135},
-      {r:235,g:90,  b:85},
-      {r:235,g:60,  b:35}
+      {r:225,g:120,b:165}, // pink        score  60
+      {r:15, g:190,b:235}, // cyan        score -220
+      {r:200,g:210,b:40 }, // lime        score  160
+      {r:120,g:130,b:140}, // slate       score -20
+      {r:240,g:130,b:30 }, // orange      score  210
+      {r:110,g:60, b:200}, // purple      score -90
+      {r:170,g:100,b:150}, // mauve       score  20
+      {r:40, g:50, b:190}, // navy        score -150
+      {r:160,g:100,b:50 }, // brown       score  110
+      {r:70, g:190,b:120}  // teal-green  score -50
     ];
     const scores=swatches.map(s=>s.r-s.b);
     let labels=Array(swatches.length).fill(null),index=0,training=false,trained=false,trainingTimer=null,activePreset=null,learnedCutoff=null;
@@ -252,14 +272,14 @@
     function loadPreset(name){
       if(!presetLessons[name])return;reset();activePreset=name;
       labels=scores.map(s=>s>=0?1:0);
-      if(name==='noisy')labels[2]=1;
+      if(name==='noisy')labels[1]=1;
       if(name==='reversed')labels=labels.map(y=>y===0?1:0);
       index=0;markPreset();showTraining();$('#trainTitle').textContent=presetLessons[name].title;$('#trainCopy').textContent=presetLessons[name].question;$('#explain').innerHTML='<strong>Watch the search.</strong><span>The cutoff will sweep across the scale, score each rule, and keep the lowest-error answer.</span>';$('#mechanicsLive').textContent='Starting a fresh search across 511 cutoffs.';$('#sideCopy').textContent=presetLessons[name].side;train();
     }
     function showTraining(){
       if(labels.some(x=>x===null))return;
-      $('.label-view').classList.add('hidden');$('.train-view').classList.add('active');
-      document.querySelectorAll('.step')[0].className='step done';document.querySelectorAll('.step')[1].className='step on';
+      $('.rgb-view').classList.add('is-hidden');$('.label-view').classList.add('is-hidden');$('.train-view').classList.add('active');
+      document.querySelectorAll('.step')[1].className='step done';document.querySelectorAll('.step')[2].className='step on';
       renderSamples();drawPoints();
     }
     function drawPoints(){
@@ -293,14 +313,27 @@
       if(training||trained)return;training=true;trainBtn.disabled=true;trainBtn.textContent='Training…';let epoch=0,bestSeen={t:-255,e:Infinity};const best=bestCutoff();
       trainingTimer=setInterval(()=>{
         epoch++;const candidate=Math.round(-255+(epoch-1)/59*510);
-        $('#boundary').style.left=`${(candidate+255)/510*100}%`;$('#epoch').textContent=`${epoch} / 60`;
+        $('#boundary').style.left=`${(candidate+255)/510*100}%`;$('#boundary').dataset.label=`cutoff ${candidate}`;$('#epoch').textContent=`${epoch} / 60`;
         let errors=0;scores.forEach((s,i)=>{if((s>=candidate?1:0)!==labels[i])errors++});if(errors<bestSeen.e)bestSeen={t:candidate,e:errors};$('#mistakes').textContent=errors;$('#mechanicsLive').textContent=`Testing cutoff ${candidate} · ${errors} mistake${errors===1?'':'s'} · best so far: ${bestSeen.t}`;
-        if(epoch===60){clearInterval(trainingTimer);trainingTimer=null;training=false;trained=true;learnedCutoff=best.t;const outcome=lessonOutcome(best);$('#boundary').style.left=`${(best.t+255)/510*100}%`;$('#mistakes').textContent=best.e;document.querySelectorAll('.step')[1].className='step done';document.querySelectorAll('.step')[2].className='step on';$('#trainTitle').textContent='You trained a classifier.';$('#trainCopy').textContent=best.ties.length>1?`The demo chose cutoff ${best.t} from ${best.ties.length} equally accurate answers.`:`It learned cutoff ${best.t}, the single lowest-error answer.`;$('#explain').innerHTML=outcome.explain;$('#mechanicsLive').textContent=`Best cutoff: ${best.t} · ${best.e} mistake${best.e===1?'':'s'}${best.ties.length>1?` · ${best.ties.length} tied answers`:''}`;$('#sideCopy').textContent=outcome.side;$('#testLab').classList.add('active');renderTest();trainBtn.textContent='Model trained ✓'}
+        if(epoch===60){clearInterval(trainingTimer);trainingTimer=null;training=false;trained=true;learnedCutoff=best.t;const outcome=lessonOutcome(best);$('#boundary').style.left=`${(best.t+255)/510*100}%`;$('#boundary').dataset.label=`cutoff ${best.t}`;$('#mistakes').textContent=best.e;$('#cutoffBanner').hidden=false;$('#cutoffValue').textContent=best.t;document.querySelectorAll('.step')[2].className='step done';document.querySelectorAll('.step')[3].className='step on';$('#trainTitle').textContent='You trained a classifier.';$('#trainCopy').textContent=best.ties.length>1?`The demo chose cutoff ${best.t} from ${best.ties.length} equally accurate answers.`:`It learned cutoff ${best.t}, the single lowest-error answer.`;$('#explain').innerHTML=outcome.explain;$('#mechanicsLive').textContent=`Best cutoff: ${best.t} · ${best.e} mistake${best.e===1?'':'s'}${best.ties.length>1?` · ${best.ties.length} tied answers`:''}`;$('#sideCopy').textContent=outcome.side;$('#testLab').classList.add('active');renderTest();trainBtn.textContent='Model trained ✓'}
       },35)
     }
-    function reset(){if(trainingTimer){clearInterval(trainingTimer);trainingTimer=null}labels=Array(swatches.length).fill(null);index=0;training=false;trained=false;activePreset=null;learnedCutoff=null;markPreset();$('.label-view').classList.remove('hidden');$('.train-view').classList.remove('active');document.querySelectorAll('.step').forEach((s,i)=>s.className=`step ${i===0?'on':''}`);$('#boundary').style.left='50%';$('#epoch').textContent='0 / 60';$('#mistakes').textContent='—';$('#trainTitle').textContent='Find the cutoff.';$('#trainCopy').textContent='Training turns your labels into one rule: a cutoff on the Red − Blue scale. It tries possible cutoffs, counts the mistakes, and remembers the best.';$('#explain').innerHTML='<strong>What is learning?</strong><span>The model compares candidate cutoffs and keeps the one that best matches your labels.</span>';$('#mechanicsLive').textContent='Ready to test 511 possible cutoffs.';document.querySelectorAll('.mechanics').forEach(d=>d.open=false);document.querySelectorAll('.reveal').forEach(d=>d.open=false);$('#testLab').classList.remove('active');$('#sideCopy').textContent='Red and Blue are just inputs. Your "warm" and "cool" answers are the labels the model tries to imitate. It never perceives color the way you do — only a subtraction and a comparison.';trainBtn.textContent='Train the model';trainBtn.disabled=false;showExample()}
+    function reset(){if(trainingTimer){clearInterval(trainingTimer);trainingTimer=null}labels=Array(swatches.length).fill(null);index=0;training=false;trained=false;activePreset=null;learnedCutoff=null;markPreset();$('.label-view').classList.remove('is-hidden');$('.train-view').classList.remove('active');document.querySelectorAll('.step').forEach((s,i)=>s.className=i===0?'step done':i===1?'step on':'step');$('#boundary').style.left='50%';$('#boundary').dataset.label='cutoff';$('#epoch').textContent='0 / 60';$('#mistakes').textContent='—';$('#cutoffBanner').hidden=true;$('#cutoffValue').textContent='—';$('#trainTitle').textContent='Find the cutoff.';$('#trainCopy').textContent='Training turns your labels into one rule: a cutoff on the Red − Blue scale. It tries possible cutoffs, counts the mistakes, and remembers the best.';$('#explain').innerHTML='<strong>What is learning?</strong><span>The model compares candidate cutoffs and keeps the one that best matches your labels.</span>';$('#mechanicsLive').textContent='Ready to test 511 possible cutoffs.';document.querySelectorAll('.mechanics').forEach(d=>d.open=false);document.querySelectorAll('.reveal').forEach(d=>d.open=false);$('#testLab').classList.remove('active');$('#sideCopy').textContent='Red and Blue are just inputs. Your "warm" and "cool" answers are the labels the model tries to imitate. It never perceives color the way you do — only a subtraction and a comparison.';trainBtn.textContent='Train the model';trainBtn.disabled=false;showExample()}
     coolBtn.addEventListener('click',()=>label(0));warmBtn.addEventListener('click',()=>label(1));prevBtn.addEventListener('click',()=>goTo(index-1));nextBtn.addEventListener('click',()=>goTo(index+1));readyBtn.addEventListener('click',showTraining);trainBtn.addEventListener('click',train);resetBtn.addEventListener('click',reset);['#redSlider','#greenSlider','#blueSlider'].forEach(sel=>$(sel).addEventListener('input',renderTest));document.querySelectorAll('.preset-btn').forEach(b=>b.addEventListener('click',()=>loadPreset(b.dataset.preset)));
-    document.addEventListener('keydown',e=>{if(!$('.label-view').classList.contains('hidden')){if(e.key==='ArrowLeft'){e.preventDefault();goTo(index-1)}if(e.key==='ArrowRight'){e.preventDefault();goTo(index+1)}if(e.key.toLowerCase()==='c')label(0);if(e.key.toLowerCase()==='w')label(1)}});
+    document.addEventListener('keydown',e=>{if(!$('.label-view').classList.contains('is-hidden')){if(e.key==='ArrowLeft'){e.preventDefault();goTo(index-1)}if(e.key==='ArrowRight'){e.preventDefault();goTo(index+1)}if(e.key.toLowerCase()==='c')label(0);if(e.key.toLowerCase()==='w')label(1)}});
+
+    function renderWarmup(){
+      const r=Number($('#warmupRedSlider').value),g=Number($('#warmupGreenSlider').value),b=Number($('#warmupBlueSlider').value);
+      $('#warmupPixel').style.background=`rgb(${r},${g},${b})`;
+      $('#warmupValR').textContent=r;$('#warmupValG').textContent=g;$('#warmupValB').textContent=b;
+      $('#warmupRedVal').textContent=r;$('#warmupGreenVal').textContent=g;$('#warmupBlueVal').textContent=b;
+    }
+    ['#warmupRedSlider','#warmupGreenSlider','#warmupBlueSlider'].forEach(sel=>$(sel).addEventListener('input',renderWarmup));
+    $('#warmupNextBtn').addEventListener('click',()=>{
+      $('.rgb-view').classList.add('is-hidden');$('.label-view').classList.remove('is-hidden');
+      document.querySelectorAll('.step')[0].className='step done';document.querySelectorAll('.step')[1].className='step on';
+    });
+    renderWarmup();
     showExample();
 
     // Expose the lesson's real actions to browsers that support WebMCP.

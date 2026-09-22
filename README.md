@@ -4,6 +4,8 @@
 
 01 – I prompted the generation of the first version, attaching the task assignment, the One-Pixel.html as a design blueprint & my edited chapter 4 PDF for factual context.
 
+02 – Feedbacked the initial version to remove some book quotes, shuffle the colors and add an explaination for RGB. 
+
 
 
 Student-facing assignments and starter materials for CPSC 1710, Fall 2026.
