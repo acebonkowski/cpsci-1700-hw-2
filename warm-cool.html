@@ -12,7 +12,7 @@
     *{box-sizing:border-box}html{font-size:16px}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
     button,input{font:inherit}button{cursor:pointer;color:inherit}.shell{max-width:1180px;margin:auto;padding:26px 24px 48px}
     header{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:24px}.brand{font-weight:900;letter-spacing:-.04em;font-size:1.35rem}.chapter{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;text-transform:uppercase;letter-spacing:.08em}
-    .lesson{display:grid;grid-template-columns:minmax(0,1.16fr) minmax(330px,.84fr);gap:22px}.card{border:2px solid var(--ink);background:#fff;padding:22px;box-shadow:var(--shadow)}
+    .lesson{display:grid;grid-template-columns:minmax(0,1.16fr) minmax(330px,.84fr);gap:22px}.intro-lesson{grid-template-columns:1fr 2fr}.card{border:2px solid var(--ink);background:#fff;padding:22px;box-shadow:var(--shadow)}
     .step-row{display:flex;gap:8px;margin-bottom:22px}.step{height:8px;flex:1;background:#ddd9cf;border:1px solid var(--ink)}.step.on{background:var(--orange)}.step.done{background:var(--acid)}
     .eyebrow{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;font-weight:800;margin:0 0 10px}.eyebrow span{background:var(--acid);padding:3px 6px;border:1px solid var(--ink)}
     h1,h2,p{margin-top:0}h1{font-size:clamp(2rem,5vw,4.7rem);line-height:.91;letter-spacing:-.065em;margin-bottom:14px;max-width:760px}h2{font-size:clamp(1.6rem,3vw,2.35rem);letter-spacing:-.045em;line-height:1.02;margin-bottom:10px}p{line-height:1.55}.lede{font-size:1.08rem;max-width:650px;color:#393a38;margin-bottom:22px}
@@ -50,7 +50,7 @@
     <div class="step-row" aria-label="Lesson progress"><div class="step on"></div><div class="step"></div><div class="step"></div><div class="step"></div></div>
 
     <div id="introScreen">
-      <div class="lesson">
+      <div class="lesson intro-lesson">
         <section class="card">
           <p class="eyebrow"><span>Overview</span></p>
           <h1>Warm or cool?</h1>
@@ -150,6 +150,7 @@
         </div>
 
         <div class="train-view">
+          <div class="step2-view">
           <p class="eyebrow"><span>Step 2</span> Train the model</p>
           <h2 id="trainTitle">Find the cutoff.</h2>
           <p class="lede" id="trainCopy">Training turns your labels into one rule: a cutoff on the Red − Blue scale. It tries possible cutoffs, counts the mistakes, and remembers the best.</p>
@@ -180,6 +181,8 @@
               <p style="margin-top:14px">Real deep-learning models can't just try every possibility — a digit-recognizing model can easily have 784 weights, one per pixel, so checking every combination would take forever. Those models use calculus (<em>gradient descent</em>) to feel out which direction to nudge each weight. Our model only has <strong>one</strong> number to search, so it skips the calculus and just brute-forces the answer — that's only possible because the search space here is tiny.</p>
             </div>
           </details>
+          <button class="btn primary" id="trainBtn">Train the model</button>
+          </div>
           <section class="test-lab" id="testLab" aria-labelledby="testTitle">
             <p class="eyebrow"><span>Step 3</span> Use the trained model</p>
             <h3 id="testTitle">Try a color it has never seen.</h3>
@@ -217,7 +220,6 @@
             </details>
           </section>
           <div class="footer-actions">
-            <button class="btn primary" id="trainBtn">Train the model</button>
             <button class="btn" id="resetBtn">Start over</button>
           </div>
         </div>
@@ -333,11 +335,17 @@
         epoch++;const candidate=Math.round(-255+(epoch-1)/59*510);
         $('#boundary').style.left=`${(candidate+255)/510*100}%`;$('#boundary').dataset.label=`cutoff ${candidate}`;$('#epoch').textContent=`${epoch} / 60`;
         let errors=0;scores.forEach((s,i)=>{if((s>=candidate?1:0)!==labels[i])errors++});if(errors<bestSeen.e)bestSeen={t:candidate,e:errors};$('#mistakes').textContent=errors;$('#mechanicsLive').textContent=`Testing cutoff ${candidate} · ${errors} mistake${errors===1?'':'s'} · best so far: ${bestSeen.t}`;
-        if(epoch===60){clearInterval(trainingTimer);trainingTimer=null;training=false;trained=true;learnedCutoff=best.t;const outcome=lessonOutcome(best);$('#boundary').style.left=`${(best.t+255)/510*100}%`;$('#boundary').dataset.label=`cutoff ${best.t}`;$('#mistakes').textContent=best.e;$('#cutoffBanner').hidden=false;$('#cutoffValue').textContent=best.t;document.querySelectorAll('.step')[2].className='step done';document.querySelectorAll('.step')[3].className='step on';$('#trainTitle').textContent='You trained a classifier.';$('#trainCopy').textContent=best.ties.length>1?`The demo chose cutoff ${best.t} from ${best.ties.length} equally accurate answers.`:`It learned cutoff ${best.t}, the single lowest-error answer.`;$('#explain').innerHTML=outcome.explain;$('#mechanicsLive').textContent=`Best cutoff: ${best.t} · ${best.e} mistake${best.e===1?'':'s'}${best.ties.length>1?` · ${best.ties.length} tied answers`:''}`;$('#sideCopy').textContent=outcome.side;$('#testLab').classList.add('active');renderTest();trainBtn.textContent='Model trained ✓'}
+        if(epoch===60){clearInterval(trainingTimer);trainingTimer=null;training=false;trained=true;learnedCutoff=best.t;const outcome=lessonOutcome(best);$('#boundary').style.left=`${(best.t+255)/510*100}%`;$('#boundary').dataset.label=`cutoff ${best.t}`;$('#mistakes').textContent=best.e;$('#cutoffBanner').hidden=false;$('#cutoffValue').textContent=best.t;$('#trainTitle').textContent='You trained a classifier.';$('#trainCopy').textContent=best.ties.length>1?`The demo chose cutoff ${best.t} from ${best.ties.length} equally accurate answers.`:`It learned cutoff ${best.t}, the single lowest-error answer.`;$('#explain').innerHTML=outcome.explain;$('#mechanicsLive').textContent=`Best cutoff: ${best.t} · ${best.e} mistake${best.e===1?'':'s'}${best.ties.length>1?` · ${best.ties.length} tied answers`:''}`;$('#sideCopy').textContent=outcome.side;trainBtn.disabled=false;trainBtn.textContent='Test the model →'}
       },35)
     }
-    function reset(){if(trainingTimer){clearInterval(trainingTimer);trainingTimer=null}labels=Array(swatches.length).fill(null);index=0;training=false;trained=false;activePreset=null;learnedCutoff=null;markPreset();$('.label-view').classList.remove('is-hidden');$('.train-view').classList.remove('active');document.querySelectorAll('.step').forEach((s,i)=>s.className=i===0?'step done':i===1?'step on':'step');$('#boundary').style.left='50%';$('#boundary').dataset.label='cutoff';$('#epoch').textContent='0 / 60';$('#mistakes').textContent='—';$('#cutoffBanner').hidden=true;$('#cutoffValue').textContent='—';$('#trainTitle').textContent='Find the cutoff.';$('#trainCopy').textContent='Training turns your labels into one rule: a cutoff on the Red − Blue scale. It tries possible cutoffs, counts the mistakes, and remembers the best.';$('#explain').innerHTML='<strong>What is learning?</strong><span>The model compares candidate cutoffs and keeps the one that best matches your labels.</span>';$('#mechanicsLive').textContent='Ready to test 511 possible cutoffs.';document.querySelectorAll('.mechanics').forEach(d=>d.open=false);document.querySelectorAll('.reveal').forEach(d=>d.open=false);$('#testLab').classList.remove('active');$('#sideCopy').textContent='Red and Blue are just inputs. Your "warm" and "cool" answers are the labels the model tries to imitate. It never perceives color the way you do — only a subtraction and a comparison.';trainBtn.textContent='Train the model';trainBtn.disabled=false;showExample()}
-    coolBtn.addEventListener('click',()=>label(0));warmBtn.addEventListener('click',()=>label(1));prevBtn.addEventListener('click',()=>goTo(index-1));nextBtn.addEventListener('click',()=>goTo(index+1));readyBtn.addEventListener('click',showTraining);trainBtn.addEventListener('click',train);resetBtn.addEventListener('click',reset);['#redSlider','#greenSlider','#blueSlider'].forEach(sel=>$(sel).addEventListener('input',renderTest));document.querySelectorAll('.preset-btn').forEach(b=>b.addEventListener('click',()=>loadPreset(b.dataset.preset)));
+    function enterTestLab(){
+      if(!trained)return;
+      $('.step2-view').classList.add('is-hidden');$('#testLab').classList.add('active');
+      document.querySelectorAll('.step')[2].className='step done';document.querySelectorAll('.step')[3].className='step on';
+      renderTest();
+    }
+    function reset(){if(trainingTimer){clearInterval(trainingTimer);trainingTimer=null}labels=Array(swatches.length).fill(null);index=0;training=false;trained=false;activePreset=null;learnedCutoff=null;markPreset();$('.label-view').classList.remove('is-hidden');$('.step2-view').classList.remove('is-hidden');$('.train-view').classList.remove('active');document.querySelectorAll('.step').forEach((s,i)=>s.className=i===0?'step done':i===1?'step on':'step');$('#boundary').style.left='50%';$('#boundary').dataset.label='cutoff';$('#epoch').textContent='0 / 60';$('#mistakes').textContent='—';$('#cutoffBanner').hidden=true;$('#cutoffValue').textContent='—';$('#trainTitle').textContent='Find the cutoff.';$('#trainCopy').textContent='Training turns your labels into one rule: a cutoff on the Red − Blue scale. It tries possible cutoffs, counts the mistakes, and remembers the best.';$('#explain').innerHTML='<strong>What is learning?</strong><span>The model compares candidate cutoffs and keeps the one that best matches your labels.</span>';$('#mechanicsLive').textContent='Ready to test 511 possible cutoffs.';document.querySelectorAll('.mechanics').forEach(d=>d.open=false);document.querySelectorAll('.reveal').forEach(d=>d.open=false);$('#testLab').classList.remove('active');$('#sideCopy').textContent='Red and Blue are just inputs. Your "warm" and "cool" answers are the labels the model tries to imitate. It never perceives color the way you do — only a subtraction and a comparison.';trainBtn.textContent='Train the model';trainBtn.disabled=false;showExample()}
+    coolBtn.addEventListener('click',()=>label(0));warmBtn.addEventListener('click',()=>label(1));prevBtn.addEventListener('click',()=>goTo(index-1));nextBtn.addEventListener('click',()=>goTo(index+1));readyBtn.addEventListener('click',showTraining);trainBtn.addEventListener('click',()=>{if(!trained){train()}else{enterTestLab()}});resetBtn.addEventListener('click',reset);['#redSlider','#greenSlider','#blueSlider'].forEach(sel=>$(sel).addEventListener('input',renderTest));document.querySelectorAll('.preset-btn').forEach(b=>b.addEventListener('click',()=>loadPreset(b.dataset.preset)));
     document.addEventListener('keydown',e=>{if(!$('.label-view').classList.contains('is-hidden')){if(e.key==='ArrowLeft'){e.preventDefault();goTo(index-1)}if(e.key==='ArrowRight'){e.preventDefault();goTo(index+1)}if(e.key.toLowerCase()==='c')label(0);if(e.key.toLowerCase()==='w')label(1)}});
 
     function renderWarmup(){
