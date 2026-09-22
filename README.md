@@ -8,6 +8,8 @@
 
 03 – Restructured Step 0 to be an explanaition of RGB to smooth out the learning curve and set the stage.
 
-04 – 
+04 – Restructured Step 2 and Step 3 by separating them.
+
+05 – Switched out repeating content for additional ML training explainer. 
 
 
