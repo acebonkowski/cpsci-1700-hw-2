@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Label colors as warm or cool, watch a tiny classifier find its cutoff, then test it on a color you pick.">
+  <meta name="theme-color" content="#101114">
+  <title>Warm or Cool? · Tiny Color Classifier</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23101114'/%3E%3Crect x='10' y='10' width='22' height='44' rx='4' fill='%234f74ff'/%3E%3Crect x='32' y='10' width='22' height='44' rx='4' fill='%23ff6b35'/%3E%3Crect x='30' y='10' width='4' height='44' fill='%23ffffff'/%3E%3C/svg%3E">
+  <style>
+    :root{--ink:#101114;--paper:#f4f1e8;--acid:#dbff4a;--orange:#ff6b35;--blue:#4f74ff;--muted:#77766f;--line:#c9c5b9;--shadow:6px 6px 0 var(--ink);--rchan:#d63b2f;--gchan:#2f9e57;--bchan:#2f6fd6}
+    *{box-sizing:border-box}html{font-size:16px}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+    button,input{font:inherit}button{cursor:pointer;color:inherit}.shell{max-width:1180px;margin:auto;padding:26px 24px 48px}
+    header{display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--ink);padding-bottom:18px;margin-bottom:24px}.brand{font-weight:900;letter-spacing:-.04em;font-size:1.35rem}.chapter{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;text-transform:uppercase;letter-spacing:.08em}
+    .lesson{display:grid;grid-template-columns:minmax(0,1.16fr) minmax(330px,.84fr);gap:22px}.card{border:2px solid var(--ink);background:#fff;padding:22px;box-shadow:var(--shadow)}
+    .step-row{display:flex;gap:8px;margin-bottom:22px}.step{height:8px;flex:1;background:#ddd9cf;border:1px solid var(--ink)}.step.on{background:var(--orange)}.step.done{background:var(--acid)}
+    .eyebrow{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;font-weight:800;margin:0 0 10px}.eyebrow span{background:var(--acid);padding:3px 6px;border:1px solid var(--ink)}
+    h1,h2,p{margin-top:0}h1{font-size:clamp(2rem,5vw,4.7rem);line-height:.91;letter-spacing:-.065em;margin-bottom:14px;max-width:760px}h2{font-size:clamp(1.6rem,3vw,2.35rem);letter-spacing:-.045em;line-height:1.02;margin-bottom:10px}p{line-height:1.55}.lede{font-size:1.08rem;max-width:650px;color:#393a38;margin-bottom:22px}
+    .pixel-stage{display:grid;grid-template-columns:minmax(180px,290px) 1fr;align-items:center;gap:26px;margin:20px 0 24px}.pixel{aspect-ratio:1;border:3px solid var(--ink);box-shadow:9px 9px 0 var(--ink);position:relative;transition:background .25s ease}
+    .swatch-info small{display:block;font-size:.78rem;letter-spacing:.08em;font-weight:800;text-transform:uppercase;margin-bottom:9px}
+    .rgb-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.chip{border:2px solid var(--ink);border-left-width:7px;padding:7px 11px;font:800 .95rem ui-monospace,monospace;background:#fff}.chip b{font-weight:900}.chip.r{border-left-color:var(--rchan)}.chip.g{border-left-color:var(--gchan)}.chip.b{border-left-color:var(--bchan)}
+    .note-dim{color:var(--muted);font-size:.82rem;margin:0 0 12px}.helper{color:var(--muted);font-size:.92rem;margin:12px 0 0}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}.btn{border:2px solid var(--ink);padding:15px 16px;background:#fff;font-weight:850;box-shadow:3px 3px 0 var(--ink);transition:transform .12s,box-shadow .12s}.btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}.btn:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink)}.btn.cool{background:var(--blue);color:#fff}.btn.warm{background:var(--orange)}.btn.primary{background:var(--orange);width:100%}.btn.selected{outline:4px solid var(--ink);outline-offset:2px}.btn:disabled{opacity:.42;cursor:not-allowed;transform:none;box-shadow:3px 3px 0 var(--ink)}.sample-nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin-top:16px}.nav-btn{border:1px solid var(--ink);background:#fff;padding:9px 11px;font-weight:750}.nav-btn:last-child{text-align:right}.sample-position{font:750 .78rem ui-monospace,monospace;color:var(--muted);white-space:nowrap}.ready-bar{margin-top:14px;padding:12px;border:2px solid var(--ink);background:var(--acid)}.ready-bar[hidden]{display:none}.ready-bar p{font-size:.88rem;margin-bottom:9px}.ready-bar .btn{width:100%;background:var(--orange);padding:11px}
+    .side{display:flex;flex-direction:column;gap:22px}.counter{display:flex;align-items:end;justify-content:space-between;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:16px}.counter strong{font-size:2.8rem;line-height:.8;letter-spacing:-.06em}.counter span{color:var(--muted);font-size:.88rem}
+    .strip{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.dot{aspect-ratio:1;border:2px solid var(--ink);display:grid;place-items:center;font-size:.72rem;font-weight:900;position:relative;padding:0;cursor:pointer}.dot.cool-labeled:after,.dot.warm-labeled:after{content:"";position:absolute;width:8px;height:8px;border-radius:50%;right:3px;top:3px;border:1px solid var(--ink)}.dot.cool-labeled:after{background:var(--blue)}.dot.warm-labeled:after{background:var(--orange)}.dot.current{outline:4px solid var(--ink);outline-offset:2px}
+    .legend{display:flex;gap:15px;margin-top:14px;font-size:.78rem}.legend i{display:inline-block;width:9px;height:9px;border:1px solid var(--ink);border-radius:50%;margin-right:5px}.legend .c{background:var(--blue)}.legend .w{background:var(--orange)}
+    .preset-card h2{font-size:1.6rem}.preset-list{display:grid;gap:8px}.preset-btn{border:1px solid var(--ink);background:#fff;text-align:left;padding:10px 11px;display:grid;grid-template-columns:auto 1fr;column-gap:9px;box-shadow:2px 2px 0 var(--ink)}.preset-btn:hover{background:var(--acid)}.preset-btn[aria-pressed="true"]{background:var(--acid);outline:3px solid var(--orange);outline-offset:1px}.preset-num{grid-row:1/3;font:900 .72rem ui-monospace,monospace;background:var(--ink);color:#fff;padding:4px;align-self:start}.preset-btn b{font-size:.88rem}.preset-btn small{font-size:.75rem;color:#555;margin-top:2px}
+    .insight{background:var(--ink);color:#fff}.insight .eyebrow span{color:var(--ink)}.insight p{color:#d6d6d2;margin-bottom:0}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+    .train-view{display:none}.train-view.active{display:block}.label-view.hidden{display:none}.plot-wrap{position:relative;margin:25px 0 18px;padding-top:34px}.axis{height:88px;border:2px solid var(--ink);position:relative;background:linear-gradient(90deg,#2540b8,#d8d3c6 50%,#e0472c)}.boundary{position:absolute;top:-12px;bottom:-12px;width:4px;background:var(--ink);left:50%;transition:left .12s linear}.boundary:before{content:"cutoff";position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font:800 .72rem ui-monospace,monospace;background:var(--ink);color:#fff;padding:4px 6px;border:1px solid var(--ink)}
+    .point{position:absolute;width:18px;height:18px;border:2px solid var(--ink);border-radius:50%;transform:translate(-50%,-50%);transition:left .3s,top .3s}.point.cool-p{top:72%}.point.warm-p{top:28%}.ticks{display:flex;justify-content:space-between;font:700 .72rem ui-monospace,monospace;margin-top:6px}.meters{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.meter{border:2px solid var(--ink);padding:12px}.meter label{display:block;text-transform:uppercase;font:800 .7rem ui-monospace,monospace;margin-bottom:5px}.meter strong{font-size:1.7rem;letter-spacing:-.04em}
+    .explain{border-left:7px solid var(--acid);padding-left:14px;margin:18px 0}.explain strong{display:block;margin-bottom:4px}.rule-diagram{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;margin-top:12px;border:1px solid var(--ink);background:#ece9df}.rule-part{padding:12px}.rule-part b{display:block;font-size:.86rem;margin-bottom:3px}.rule-part span{font-size:.8rem;color:#555}.rule-divider{display:grid;place-items:center;background:var(--orange);border-left:1px solid var(--ink);border-right:1px solid var(--ink);padding:8px;font:800 .7rem ui-monospace,monospace;text-transform:uppercase;writing-mode:vertical-rl}.footer-actions{display:flex;gap:10px}.footer-actions .btn{flex:1}
+    .mechanics{margin:16px 0;border:2px solid var(--ink);background:#f8f6ef}.mechanics summary{list-style:none;padding:14px 46px 14px 15px;font-weight:850;cursor:pointer;position:relative}.mechanics summary::-webkit-details-marker{display:none}.mechanics summary:after{content:"+";position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:1.45rem;line-height:1}.mechanics[open]>summary{border-bottom:2px solid var(--ink)}.mechanics-body{padding:15px}.mechanics-body>p{margin-bottom:14px}.mechanics-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:8px}.mechanic-step{border:1px solid var(--ink);padding:10px;background:#fff}.mechanic-step b{display:block;font:800 .7rem ui-monospace,monospace;text-transform:uppercase;margin-bottom:5px}.mechanic-step span{font-size:.85rem;line-height:1.35;display:block}.flow-arrow{display:grid;place-items:center;font-weight:900}.mechanics-live{margin:12px 0 0;background:var(--ink);color:#fff;padding:10px 12px;font:700 .8rem ui-monospace,monospace}.challenge{margin-top:14px;padding:13px;border:1px solid var(--ink);background:var(--acid)}.challenge>strong{display:block;margin-bottom:4px}.challenge>p{font-size:.88rem;margin-bottom:10px}.reveal{background:#fff;border:1px solid var(--ink)}.reveal summary{padding:10px 40px 10px 11px;font-size:.85rem}.reveal p{padding:0 11px 11px;margin:0;font-size:.86rem;line-height:1.45}.reveal[open] summary{border-bottom:0}.scope-note{margin-top:14px;border:1px solid var(--ink);background:#fff;padding:13px}.scope-note>strong{display:block;margin-bottom:9px}.scope-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.scope-part{border-left:5px solid var(--blue);padding-left:9px}.scope-part:last-child{border-color:var(--orange)}.scope-part b{display:block;font-size:.82rem;margin-bottom:3px}.scope-part span{font-size:.8rem;line-height:1.4;display:block;color:#494a47}.quote{margin:0 0 14px;padding-left:12px;border-left:4px solid var(--ink);font-style:italic;font-size:.86rem;color:#333}.quote cite{display:block;font-style:normal;font-size:.74rem;color:var(--muted);margin-top:4px}.codeblock{background:#f8f6ef;border:1px solid var(--ink);padding:11px;font-size:.82rem;overflow:auto;margin:0 0 14px;line-height:1.5}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .test-lab{display:none;margin:18px 0;border:2px solid var(--ink);background:var(--acid);padding:16px}.test-lab.active{display:block}.test-lab .eyebrow{margin-bottom:8px}.test-lab h3{font-size:1.45rem;letter-spacing:-.035em;margin:0 0 6px}.test-lab>p{font-size:.9rem;margin-bottom:14px}.test-grid{display:grid;grid-template-columns:90px 1fr;gap:16px;align-items:start}.test-pixel{aspect-ratio:1;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}.test-controls label{display:block;font-weight:800;margin-bottom:8px}.test-controls input{width:100%;accent-color:var(--orange);margin-bottom:4px}#redSlider{accent-color:var(--rchan)}#greenSlider{accent-color:var(--gchan)}#blueSlider{accent-color:var(--bchan)}.test-controls small{display:block;color:var(--muted);font-size:.78rem;margin-bottom:14px}.test-scale{display:flex;justify-content:space-between;font:700 .7rem ui-monospace,monospace;color:#555}
+    .evidence-heading{font:800 .78rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.06em;margin:13px 0 6px}
+    .test-result{margin-top:2px;background:#fff;border:2px solid var(--ink);padding:12px;font-size:.95rem;line-height:1.4}.test-result strong{font-size:1.08rem}
+    .evidence-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}.evidence-row:last-of-type{border-bottom:0}
+    .ev-label{font:800 .72rem ui-monospace,monospace;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);white-space:nowrap;padding-top:2px}
+    .ev-value{text-align:right;font-weight:700}.ev-dim{font-weight:400;color:var(--muted);font-size:.78rem}
+    .evidence-row.result{background:var(--acid);margin:6px -12px -12px;padding:10px 12px;border-bottom:0}.evidence-row.result .ev-value strong{font-size:1.3rem;letter-spacing:-.02em}
+    @media(max-width:820px){.lesson{grid-template-columns:1fr}.pixel-stage{grid-template-columns:minmax(140px,210px) 1fr}.side{display:grid;grid-template-columns:1fr 1fr}.insight{grid-column:1/-1}}
+    @media(max-width:560px){.shell{padding:16px 14px 34px}header{margin-bottom:16px}.chapter{display:none}.card{padding:17px;box-shadow:4px 4px 0 var(--ink)}.pixel-stage{grid-template-columns:1fr;gap:18px}.pixel{width:min(72vw,250px)}.actions,.side,.meters{grid-template-columns:1fr}.insight{grid-column:auto}.strip{gap:5px}.dot{font-size:.62rem}.footer-actions{flex-direction:column}.mechanics-flow,.scope-grid{grid-template-columns:1fr}.flow-arrow{transform:rotate(90deg)}.rule-part{padding:10px}.rule-part b{font-size:.78rem}.test-grid{grid-template-columns:72px 1fr}}
+    .tb-credit{margin-top:34px;padding-top:16px;border-top:2px solid var(--ink);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.76rem;letter-spacing:.04em;color:var(--muted)}.tb-credit a{color:var(--ink);font-weight:750}.tb-credit a:hover{color:var(--orange)}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header><div class="brand">WARM / COOL · ML</div><div class="chapter">Interactive lesson · about 3 minutes</div></header>
+    <div class="lesson">
+      <section class="card" aria-live="polite">
+        <div class="step-row" aria-label="Lesson progress"><div class="step on"></div><div class="step"></div><div class="step"></div></div>
+
+        <div class="label-view">
+          <p class="eyebrow"><span>Step 1</span> Make the training data</p>
+          <h1>Warm or cool?</h1>
+          <p class="lede">A computer never sees a color the way you do. It only sees three numbers — how much Red, Green, and Blue mix together. You decide the label; the computer will look for the pattern.</p>
+          <div class="pixel-stage">
+            <div class="pixel" id="pixel" aria-hidden="true"></div>
+            <div class="swatch-info">
+              <small>Color values</small>
+              <div class="rgb-row">
+                <span class="chip r">R <b id="valR">15</b></span>
+                <span class="chip g">G <b id="valG">90</b></span>
+                <span class="chip b">B <b id="valB">235</b></span>
+              </div>
+              <p class="helper">Would you call this color warm or cool?</p>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn cool" id="coolBtn" aria-pressed="false">Cool</button>
+            <button class="btn warm" id="warmBtn" aria-pressed="false">Warm</button>
+          </div>
+          <div class="sample-nav" aria-label="Browse training samples">
+            <button class="nav-btn" id="prevBtn"><span aria-hidden="true">←</span> Previous</button>
+            <span class="sample-position" id="samplePosition">1 of 10</span>
+            <button class="nav-btn" id="nextBtn">Next <span aria-hidden="true">→</span></button>
+          </div>
+          <p class="helper">Use ← → to browse. Press C or W to label.</p>
+          <div class="ready-bar" id="readyBar" hidden>
+            <p>All 10 are labeled. Review or change any answer before training.</p>
+            <button class="btn" id="readyBtn">Train, then test the model</button>
+          </div>
+
+          <details class="mechanics">
+            <summary>What is a "label," really?</summary>
+            <div class="mechanics-body">
+              <blockquote class="quote">“There's a folder of 3s, and a folder of 7s. In machine learning parlance, we say that ‘3’ and ‘7’ are the labels (or targets) in this dataset.”<cite>Deep Learning for Coders, ch. 4 — on the MNIST digit dataset</cite></blockquote>
+              <p>Every example in a dataset has two parts: the <strong>input</strong> (what the computer can measure on its own) and the <strong>label</strong> (the answer a person attaches by hand). The book's digit classifier used folders of images labeled "3" or "7." Yours works the same way, just with color:</p>
+              <div class="rule-diagram" aria-label="Input versus label">
+                <div class="rule-part"><b>Red, Green, Blue</b><span>Measured automatically the instant a color exists</span></div>
+                <div class="rule-divider">you add</div>
+                <div class="rule-part"><b>Warm / Cool</b><span>The label — your click is the only reason it exists</span></div>
+              </div>
+              <div class="challenge">
+                <strong>Try an experiment</strong>
+                <p>Find a swatch where Red and Blue look almost equal — a muddy grey-purple. Label it whichever way you like. Does the computer "know" you weren't sure?</p>
+                <details class="reveal"><summary>Reveal the answer</summary><p>No. The computer only ever receives the single label you give it — warm or cool, nothing in between. Your hesitation disappears the moment you click a button. This is exactly why real datasets can contain quiet disagreements between whoever labeled them.</p></details>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="train-view">
+          <p class="eyebrow"><span>Step 2</span> Train the model</p>
+          <h2 id="trainTitle">Find the cutoff.</h2>
+          <p class="lede" id="trainCopy">Training turns your labels into one rule: a cutoff on the Red − Blue scale. It tries possible cutoffs, counts the mistakes, and remembers the best.</p>
+          <div class="plot-wrap" aria-label="Red-minus-blue scale with labeled samples and learned cutoff">
+            <div class="axis" id="axis"><div class="boundary" id="boundary"></div></div>
+            <div class="ticks"><span>−255 · all blue</span><span>Red − Blue</span><span>255 · all red</span></div>
+          </div>
+          <div class="meters"><div class="meter"><label>Training round</label><strong id="epoch">0 / 60</strong></div><div class="meter"><label>Mistakes</label><strong id="mistakes">—</strong></div></div>
+          <div class="explain" id="explain"><strong>What is learning?</strong><span>The model compares candidate cutoffs and keeps the one that best matches your labels.</span></div>
+          <div class="rule-diagram" aria-label="How the model uses its cutoff">
+            <div class="rule-part"><b>Score below the cutoff</b><span>The model calls it cool</span></div>
+            <div class="rule-divider">cutoff</div>
+            <div class="rule-part"><b>Score at or above the cutoff</b><span>The model calls it warm</span></div>
+          </div>
+          <details class="mechanics" id="mechanics">
+            <summary>How does training choose the cutoff?</summary>
+            <div class="mechanics-body">
+              <p>Each color's <strong>score</strong> is just Red − Blue (from −255 to 255). This tiny model checks every whole-number cutoff in that range — 511 of them — and counts how many labels it would get wrong. The animation samples that search so you can watch it happen.</p>
+              <div class="mechanics-flow" aria-label="Three steps in training">
+                <div class="mechanic-step"><b>1 · Try</b><span>Place a candidate cutoff on the Red − Blue scale.</span></div>
+                <div class="flow-arrow" aria-hidden="true">→</div>
+                <div class="mechanic-step"><b>2 · Predict</b><span>Below is cool; at or above is warm.</span></div>
+                <div class="flow-arrow" aria-hidden="true">→</div>
+                <div class="mechanic-step"><b>3 · Score</b><span>Count disagreements with your labels; keep the lowest score.</span></div>
+              </div>
+              <div class="mechanics-live" id="mechanicsLive" aria-live="polite">Ready to test 511 possible cutoffs.</div>
+              <blockquote class="quote" style="margin-top:14px">“The metric is to drive human understanding and the loss is to drive automated learning… accuracy is a function that is constant almost everywhere, so its derivative is nil almost everywhere… useless for updating the model.”<cite>Deep Learning for Coders, ch. 4 — on why accuracy can't train a real neural net</cite></blockquote>
+              <p>Real deep-learning models can't just try every possibility — the digit classifier in the same chapter has 784 weights, one per pixel, so checking every combination would take forever. Those models use calculus (<em>gradient descent</em>: init → predict → loss → gradient → step → repeat) to feel out which direction to nudge each weight. Our model only has <strong>one</strong> number to search, so it skips the calculus entirely and just brute-forces the answer.</p>
+              <div class="challenge">
+                <strong>Try an experiment</strong>
+                <p>Label the reddest colors "cool" and the bluest colors "warm" — backwards from what you'd expect. Why can't the model get a low mistake score?</p>
+                <details class="reveal"><summary>Reveal the answer</summary><p>The model has a built-in rule it can never break: cool belongs below the cutoff, warm belongs above it. Sliding the cutoff left or right cannot swap which side means what. A more flexible model could learn that too — this one can't, because that rule is baked into how it makes predictions, not something it searches for.</p></details>
+              </div>
+              <div class="scope-note">
+                <strong>Is this how machine learning usually learns?</strong>
+                <div class="scope-grid">
+                  <div class="scope-part"><b>Yes — the basic loop</b><span>Choose a model, make predictions, measure the mistakes, then improve or select its settings.</span></div>
+                  <div class="scope-part"><b>No — the search method</b><span>This demo can exhaustively check 511 cutoffs. Real models have far too many parameters for that and use gradient descent instead.</span></div>
+                </div>
+              </div>
+            </div>
+          </details>
+          <section class="test-lab" id="testLab" aria-labelledby="testTitle">
+            <p class="eyebrow"><span>Step 3</span> Use the trained model</p>
+            <h3 id="testTitle">Try a color it has never seen.</h3>
+            <p>Training found one cutoff. Now mix your own color and watch the model apply that same rule to it.</p>
+            <div class="test-grid">
+              <div class="test-pixel" id="testPixel" aria-hidden="true"></div>
+              <div class="test-controls">
+                <label for="redSlider">Red <span id="redVal">180</span></label>
+                <input id="redSlider" type="range" min="0" max="255" value="180" aria-describedby="testResult">
+                <label for="greenSlider">Green <span id="greenVal">130</span></label>
+                <input id="greenSlider" type="range" min="0" max="255" value="130" aria-describedby="testResult">
+                <small>Green only changes the picture — the model's formula never uses it.</small>
+                <label for="blueSlider">Blue <span id="blueVal">90</span></label>
+                <input id="blueSlider" type="range" min="0" max="255" value="90" aria-describedby="testResult">
+                <div class="test-scale"><span>0</span><span>255</span></div>
+              </div>
+            </div>
+            <p class="evidence-heading">The evidence, not just the answer</p>
+            <div class="test-result" id="testResult" aria-live="polite"></div>
+            <details class="mechanics" style="margin-top:16px;background:#fff">
+              <summary>What does the model actually remember?</summary>
+              <div class="mechanics-body">
+                <p>After training, the model throws away all 10 colors you labeled. It keeps exactly one number: the cutoff. Every prediction — including the one above — comes from this:</p>
+                <pre class="codeblock mono">function predict(red, blue) {
+  const score = red - blue
+  return score &gt;= cutoff ? "warm" : "cool"
+}</pre>
+                <blockquote class="quote">“Parameters: The weights and biases of a model. The weights are the <code>w</code> in the equation <code>w*x+b</code>, and the biases are the <code>b</code> in that equation.”<cite>Deep Learning for Coders, ch. 4 — Jargon box</cite></blockquote>
+                <p>The book's simplest digit-classifier does the same kind of comparison in spirit: <code>is_3(x) = mnist_distance(x, mean3) &lt; mnist_distance(x, mean7)</code> — pick whichever number is smaller. Ours compares one score to one stored threshold. In the book's jargon, the <strong>cutoff</strong> is a <em>parameter</em> (learned once, then frozen); the score you compute right now for your slider color is an <em>activation</em> (a fresh number calculated every time you move a slider).</p>
+                <div class="challenge">
+                  <strong>Try an experiment</strong>
+                  <p>Drag the Green slider all the way up, then all the way down, without touching Red or Blue. Does the prediction change?</p>
+                  <details class="reveal"><summary>Reveal the answer</summary><p>Never. Green isn't part of the formula above, so it cannot affect the answer — even though it visibly changes the color. The model was never "looking" at the picture at all.</p></details>
+                </div>
+              </div>
+            </details>
+          </section>
+          <div class="footer-actions">
+            <button class="btn primary" id="trainBtn">Train the model</button>
+            <button class="btn" id="resetBtn">Start over</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="side">
+        <section class="card">
+          <div class="counter"><div><span>Colors labeled</span><br><strong id="count">0</strong></div><span>/ 10</span></div>
+          <div class="strip" id="strip" aria-label="Training examples"></div>
+          <div class="legend"><span><i class="c"></i>cool</span><span><i class="w"></i>warm</span></div>
+        </section>
+        <section class="card preset-card">
+          <p class="eyebrow"><span>Guided stops</span></p>
+          <h2>Try three patterns.</h2>
+          <div class="preset-list">
+            <button class="preset-btn" data-preset="clean" aria-pressed="false"><span class="preset-num">01</span><b>Clean split</b><small>Is there one right cutoff?</small></button>
+            <button class="preset-btn" data-preset="noisy" aria-pressed="false"><span class="preset-num">02</span><b>One odd label</b><small>What will the model sacrifice?</small></button>
+            <button class="preset-btn" data-preset="reversed" aria-pressed="false"><span class="preset-num">03</span><b>Reversed labels</b><small>What can this model not learn?</small></button>
+          </div>
+          <p class="helper">Choose one to load it and run training automatically.</p>
+        </section>
+        <section class="card insight">
+          <p class="eyebrow"><span>Big idea</span></p>
+          <h2>Two numbers, one guess.</h2>
+          <p id="sideCopy">Red and Blue are just inputs. Your "warm" and "cool" answers are the labels the model tries to imitate. It never perceives color the way you do — only a subtraction and a comparison.</p>
+        </section>
+      </aside>
+    </div>
+    <footer class="tb-credit">
+      <span>Layout &amp; interaction pattern adapted from the <a href="one-pixel.html">One Pixel ML Lab</a> by Xiuye Chen (CC BY 4.0) · Warm/Cool build for CPSC 1710 HW2</span>
+    </footer>
+  </main>
+  <script>
+    const swatches=[
+      {r:15, g:90,  b:235},
+      {r:55, g:110, b:235},
+      {r:95, g:130, b:235},
+      {r:145,g:160, b:235},
+      {r:195,g:200, b:235},
+      {r:235,g:205, b:215},
+      {r:235,g:150, b:175},
+      {r:235,g:120, b:135},
+      {r:235,g:90,  b:85},
+      {r:235,g:60,  b:35}
+    ];
+    const scores=swatches.map(s=>s.r-s.b);
+    let labels=Array(swatches.length).fill(null),index=0,training=false,trained=false,trainingTimer=null,activePreset=null,learnedCutoff=null;
+    const $=s=>document.querySelector(s);
+    const pixel=$('#pixel'),strip=$('#strip'),count=$('#count');
+    const coolBtn=$('#coolBtn'),warmBtn=$('#warmBtn'),trainBtn=$('#trainBtn'),resetBtn=$('#resetBtn');
+    const prevBtn=$('#prevBtn'),nextBtn=$('#nextBtn'),readyBtn=$('#readyBtn');
+    const presetLessons={
+      clean:{title:'Guided stop 1: clean split',question:'Several cutoffs look perfect. Will the model find one unique answer?',side:'Watch the model test the cleanly separated labels. Zero mistakes does not necessarily mean one unique cutoff.'},
+      noisy:{title:'Guided stop 2: one odd label',question:'One label breaks the pattern. Will the model chase it or accept a mistake?',side:'Watch how one contradictory example changes the best possible score.'},
+      reversed:{title:'Guided stop 3: reversed labels',question:'The labels run against the model’s built-in direction. What can one cutoff do?',side:'Watch the model search even though its fixed rule cannot represent this reversed pattern.'}
+    };
+
+    function textColorFor(r,g,b){const lum=0.299*r+0.587*g+0.114*b;return lum<150?'white':'black'}
+    function renderSamples(){
+      strip.innerHTML='';
+      swatches.forEach((s,i)=>{const d=document.createElement('button');d.type='button';d.className='dot';d.style.background=`rgb(${s.r},${s.g},${s.b})`;d.style.color=textColorFor(s.r,s.g,s.b);d.textContent=i+1;d.setAttribute('aria-label',`Sample ${i+1}, red ${s.r} green ${s.g} blue ${s.b}${labels[i]===null?', not labeled':`, labeled ${labels[i]===0?'cool':'warm'}`}`);if(i===index)d.classList.add('current');if(labels[i]===0)d.classList.add('cool-labeled');if(labels[i]===1)d.classList.add('warm-labeled');d.addEventListener('click',()=>goTo(i));strip.appendChild(d)});
+      const labeled=labels.filter(x=>x!==null).length;count.textContent=labeled;$('#readyBar').hidden=labeled!==swatches.length;
+    }
+    function showExample(){const s=swatches[index];pixel.style.background=`rgb(${s.r},${s.g},${s.b})`;$('#valR').textContent=s.r;$('#valG').textContent=s.g;$('#valB').textContent=s.b;$('#samplePosition').textContent=`${index+1} of ${swatches.length}`;prevBtn.disabled=index===0;nextBtn.disabled=index===swatches.length-1;coolBtn.classList.toggle('selected',labels[index]===0);warmBtn.classList.toggle('selected',labels[index]===1);coolBtn.setAttribute('aria-pressed',labels[index]===0);warmBtn.setAttribute('aria-pressed',labels[index]===1);renderSamples()}
+    function goTo(i){if(training)return;index=Math.max(0,Math.min(swatches.length-1,i));showExample()}
+    function label(y){if(training)return;labels[index]=y;const nextEmpty=labels.findIndex((x,i)=>i>index&&x===null);if(nextEmpty!==-1)index=nextEmpty;else if(index<swatches.length-1&&labels[index+1]===null)index++;showExample()}
+    function markPreset(){document.querySelectorAll('.preset-btn').forEach(b=>b.setAttribute('aria-pressed',b.dataset.preset===activePreset))}
+    function loadPreset(name){
+      if(!presetLessons[name])return;reset();activePreset=name;
+      labels=scores.map(s=>s>=0?1:0);
+      if(name==='noisy')labels[2]=1;
+      if(name==='reversed')labels=labels.map(y=>y===0?1:0);
+      index=0;markPreset();showTraining();$('#trainTitle').textContent=presetLessons[name].title;$('#trainCopy').textContent=presetLessons[name].question;$('#explain').innerHTML='<strong>Watch the search.</strong><span>The cutoff will sweep across the scale, score each rule, and keep the lowest-error answer.</span>';$('#mechanicsLive').textContent='Starting a fresh search across 511 cutoffs.';$('#sideCopy').textContent=presetLessons[name].side;train();
+    }
+    function showTraining(){
+      if(labels.some(x=>x===null))return;
+      $('.label-view').classList.add('hidden');$('.train-view').classList.add('active');
+      document.querySelectorAll('.step')[0].className='step done';document.querySelectorAll('.step')[1].className='step on';
+      renderSamples();drawPoints();
+    }
+    function drawPoints(){
+      document.querySelectorAll('.point').forEach(p=>p.remove());
+      swatches.forEach((s,i)=>{const p=document.createElement('div');p.className=`point ${labels[i]===0?'cool-p':'warm-p'}`;p.style.left=`${(scores[i]+255)/510*100}%`;p.style.background=`rgb(${s.r},${s.g},${s.b})`;p.title=`Red ${s.r}, Blue ${s.b} (score ${scores[i]}): ${labels[i]===0?'cool':'warm'}`;$('#axis').appendChild(p)});
+    }
+    function bestCutoff(){
+      let lowest=Infinity,ties=[];
+      for(let t=-255;t<=255;t++){let e=0;scores.forEach((s,i)=>{if((s>=t?1:0)!==labels[i])e++});if(e<lowest){lowest=e;ties=[t]}else if(e===lowest)ties.push(t)}
+      return {t:ties[0],e:lowest,ties};
+    }
+    function lessonOutcome(best){
+      const tieNote=best.ties.length>1?`${best.ties.length} whole-number cutoffs tie for the lowest score. This demo chooses the first one, ${best.t}.`:`Only cutoff ${best.t} gets the lowest score.`;
+      if(activePreset==='clean')return {explain:`<strong>Learning point: the answer is not unique.</strong><span>${tieNote} A different tie-breaking rule could choose another equally accurate cutoff.</span>`,side:'Good training data can still allow several equally accurate cutoffs. Training needs a rule for breaking ties.'};
+      if(activePreset==='noisy')return {explain:`<strong>Learning point: best does not always mean perfect.</strong><span>The model accepts ${best.e} mistake${best.e===1?'':'s'} because no single cutoff fits every label. ${tieNote}</span>`,side:'A model balances all examples according to its scoring rule. One contradictory label may remain a mistake.'};
+      if(activePreset==='reversed')return {explain:`<strong>Learning point: the model sets the limits.</strong><span>Even its best cutoff makes ${best.e} mistakes. Sliding one boundary cannot put "warm" on the blue side and "cool" on the red side.</span>`,side:'A model can only learn patterns its rule can represent. Here the labels and the fixed rule point in opposite directions.'};
+      return {explain:best.e===0?`<strong>What did it learn?</strong><span>One cutoff correctly separates all 10 labels. ${tieNote}</span>`:`<strong>What did it learn?</strong><span>The best cutoff still makes ${best.e} mistake${best.e===1?'':'s'}. ${tieNote}</span>`,side:'Machine learning is pattern-finding from examples. A high mistake count can come from the model, the labeling pattern, or both.'};
+    }
+    function renderTest(){
+      if(learnedCutoff===null)return;
+      const r=Number($('#redSlider').value),g=Number($('#greenSlider').value),b=Number($('#blueSlider').value),score=r-b,meets=score>=learnedCutoff,prediction=meets?'Warm':'Cool';
+      $('#redVal').textContent=r;$('#greenVal').textContent=g;$('#blueVal').textContent=b;$('#testPixel').style.background=`rgb(${r},${g},${b})`;
+      $('#testResult').innerHTML=`
+        <div class="evidence-row"><span class="ev-label">1 · Input</span><span class="ev-value">Red ${r} · Blue ${b} <span class="ev-dim">(Green ${g} — ignored)</span></span></div>
+        <div class="evidence-row"><span class="ev-label">2 · Score</span><span class="ev-value">${r} − ${b} = <strong>${score}</strong></span></div>
+        <div class="evidence-row"><span class="ev-label">3 · Compare</span><span class="ev-value">${score} ${meets?'≥':'&lt;'} cutoff ${learnedCutoff} → ${meets?'yes':'no'}</span></div>
+        <div class="evidence-row result"><span class="ev-label">4 · Prediction</span><span class="ev-value"><strong>${prediction}</strong></span></div>
+      `;
+    }
+    function train(){
+      if(training||trained)return;training=true;trainBtn.disabled=true;trainBtn.textContent='Training…';let epoch=0,bestSeen={t:-255,e:Infinity};const best=bestCutoff();
+      trainingTimer=setInterval(()=>{
+        epoch++;const candidate=Math.round(-255+(epoch-1)/59*510);
+        $('#boundary').style.left=`${(candidate+255)/510*100}%`;$('#epoch').textContent=`${epoch} / 60`;
+        let errors=0;scores.forEach((s,i)=>{if((s>=candidate?1:0)!==labels[i])errors++});if(errors<bestSeen.e)bestSeen={t:candidate,e:errors};$('#mistakes').textContent=errors;$('#mechanicsLive').textContent=`Testing cutoff ${candidate} · ${errors} mistake${errors===1?'':'s'} · best so far: ${bestSeen.t}`;
+        if(epoch===60){clearInterval(trainingTimer);trainingTimer=null;training=false;trained=true;learnedCutoff=best.t;const outcome=lessonOutcome(best);$('#boundary').style.left=`${(best.t+255)/510*100}%`;$('#mistakes').textContent=best.e;document.querySelectorAll('.step')[1].className='step done';document.querySelectorAll('.step')[2].className='step on';$('#trainTitle').textContent='You trained a classifier.';$('#trainCopy').textContent=best.ties.length>1?`The demo chose cutoff ${best.t} from ${best.ties.length} equally accurate answers.`:`It learned cutoff ${best.t}, the single lowest-error answer.`;$('#explain').innerHTML=outcome.explain;$('#mechanicsLive').textContent=`Best cutoff: ${best.t} · ${best.e} mistake${best.e===1?'':'s'}${best.ties.length>1?` · ${best.ties.length} tied answers`:''}`;$('#sideCopy').textContent=outcome.side;$('#testLab').classList.add('active');renderTest();trainBtn.textContent='Model trained ✓'}
+      },35)
+    }
+    function reset(){if(trainingTimer){clearInterval(trainingTimer);trainingTimer=null}labels=Array(swatches.length).fill(null);index=0;training=false;trained=false;activePreset=null;learnedCutoff=null;markPreset();$('.label-view').classList.remove('hidden');$('.train-view').classList.remove('active');document.querySelectorAll('.step').forEach((s,i)=>s.className=`step ${i===0?'on':''}`);$('#boundary').style.left='50%';$('#epoch').textContent='0 / 60';$('#mistakes').textContent='—';$('#trainTitle').textContent='Find the cutoff.';$('#trainCopy').textContent='Training turns your labels into one rule: a cutoff on the Red − Blue scale. It tries possible cutoffs, counts the mistakes, and remembers the best.';$('#explain').innerHTML='<strong>What is learning?</strong><span>The model compares candidate cutoffs and keeps the one that best matches your labels.</span>';$('#mechanicsLive').textContent='Ready to test 511 possible cutoffs.';document.querySelectorAll('.mechanics').forEach(d=>d.open=false);document.querySelectorAll('.reveal').forEach(d=>d.open=false);$('#testLab').classList.remove('active');$('#sideCopy').textContent='Red and Blue are just inputs. Your "warm" and "cool" answers are the labels the model tries to imitate. It never perceives color the way you do — only a subtraction and a comparison.';trainBtn.textContent='Train the model';trainBtn.disabled=false;showExample()}
+    coolBtn.addEventListener('click',()=>label(0));warmBtn.addEventListener('click',()=>label(1));prevBtn.addEventListener('click',()=>goTo(index-1));nextBtn.addEventListener('click',()=>goTo(index+1));readyBtn.addEventListener('click',showTraining);trainBtn.addEventListener('click',train);resetBtn.addEventListener('click',reset);['#redSlider','#greenSlider','#blueSlider'].forEach(sel=>$(sel).addEventListener('input',renderTest));document.querySelectorAll('.preset-btn').forEach(b=>b.addEventListener('click',()=>loadPreset(b.dataset.preset)));
+    document.addEventListener('keydown',e=>{if(!$('.label-view').classList.contains('hidden')){if(e.key==='ArrowLeft'){e.preventDefault();goTo(index-1)}if(e.key==='ArrowRight'){e.preventDefault();goTo(index+1)}if(e.key.toLowerCase()==='c')label(0);if(e.key.toLowerCase()==='w')label(1)}});
+    showExample();
+
+    // Expose the lesson's real actions to browsers that support WebMCP.
+    if(document.modelContext?.registerTool){
+      const toolLife=new AbortController();
+      const register=tool=>Promise.resolve(document.modelContext.registerTool(tool,{signal:toolLife.signal})).catch(()=>{});
+      register({
+        name:'label_training_examples',title:'Label training examples',
+        description:'Apply warm or cool labels to all 10 visible color swatches and open the training step.',
+        inputSchema:{type:'object',properties:{labels:{type:'array',minItems:10,maxItems:10,items:{type:'string',enum:['cool','warm']}}},required:['labels'],additionalProperties:false},
+        annotations:{readOnlyHint:false,untrustedContentHint:false},
+        execute(input){
+          if(!input||!Array.isArray(input.labels)||input.labels.length!==10||input.labels.some(x=>x!=='cool'&&x!=='warm'))throw new Error('Provide exactly 10 labels, each cool or warm.');
+          reset();labels=input.labels.map(x=>x==='warm'?1:0);index=swatches.length;showTraining();
+          return {examples_labeled:10,next_step:'train the classifier'};
+        }
+      });
+      register({
+        name:'start_classifier_training',title:'Train the classifier',
+        description:'Start the visible training animation after all examples have labels.',
+        inputSchema:{type:'object',properties:{},additionalProperties:false},
+        annotations:{readOnlyHint:false,untrustedContentHint:false},
+        execute(){if(labels.some(x=>x===null))throw new Error('Label all 10 examples before training.');const result=bestCutoff();train();return {training_started:true,learned_cutoff:result.t,training_mistakes:result.e}}
+      });
+      register({
+        name:'load_guided_preset',title:'Load a guided example',
+        description:'Load one of the visible guided labeling patterns and immediately run its training walkthrough.',
+        inputSchema:{type:'object',properties:{preset:{type:'string',enum:['clean','noisy','reversed']}},required:['preset'],additionalProperties:false},
+        annotations:{readOnlyHint:false,untrustedContentHint:false},
+        execute(input){if(!input||!presetLessons[input.preset])throw new Error('Choose clean, noisy, or reversed.');loadPreset(input.preset);return {preset:input.preset,examples_labeled:10,training_started:true}}
+      });
+    }
+  </script>
+</body>
+</html>

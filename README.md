@@ -1,4 +1,10 @@
-# CPSC 1710 Labs
+# CPSC 1710 Labs – Ace Bonkowski
+
+## Lab 2 – Dev Log
+
+01 – I prompted the generation of the first version, attaching the task assignment, the One-Pixel.html as a design blueprint & my edited chapter 4 PDF for factual context.
+
+
 
 Student-facing assignments and starter materials for CPSC 1710, Fall 2026.
 
